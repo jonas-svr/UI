@@ -8,6 +8,8 @@ namespace ColorPicker
     {
 
         public float lineVal;
+        public int V;
+             
 
         // Start is called before the first frame update
         void Start()
@@ -21,6 +23,7 @@ namespace ColorPicker
 
         public void SetIndex(int i,int tot, ColorPalette palette)
         {
+            V = i;
             lineVal = i * 1.0f / (tot-1);
             lineVal = 1 - lineVal;
             BlockContainer bc = GetComponent<BlockContainer>();

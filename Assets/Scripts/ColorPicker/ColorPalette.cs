@@ -5,6 +5,10 @@ using UnityEngine.Events;
 
 namespace ColorPicker
 {
+    [System.Serializable] public class UnityEventOneInt : UnityEvent<int> { }
+    [System.Serializable] public class UnityEventTowInt : UnityEvent<int, int> { }
+    [System.Serializable] public class UnityEventForInt : UnityEvent<int, int,int,int> { }
+
     public class ColorPalette : MonoBehaviour
     {
 
@@ -23,9 +27,18 @@ namespace ColorPicker
         public Color curNuance;
         public Color curPreset;
 
-        public UnityEvent OnHUEChange;
-        public UnityEvent OnNuanceChange;
-        public UnityEvent OnPresetChange;
+        public int curH = 0;
+        public int curS = 0;
+        public int curV = 0;
+        public int curP = 0;
+
+        public UnityEvent<int> OnHUEChange = new UnityEventOneInt();
+        public UnityEvent<int,int> OnNuanceChange = new UnityEventTowInt();
+        public UnityEvent<int> OnPresetChange = new UnityEventOneInt();
+        public UnityEvent<int,int,int,int> OnSelectChange = new UnityEventForInt();
+
+        public List<ColorPreset> colorPresets;
+            
 
         private void Awake()
         {
@@ -46,6 +59,9 @@ namespace ColorPicker
             PresetContainer.numberOfBlocks = numberOfPreset;
             PresetContainer.UpdateChildren();
             oldNumberOfPreset = numberOfPreset;
+            colorPresets = new List<ColorPreset>();
+            for (int i = 0; i < numberOfPreset; i++)
+                colorPresets.Add(new ColorPreset(Color.white, 0, 0, 0));
         }
 
 #if UNITY_EDITOR
@@ -57,25 +73,35 @@ namespace ColorPicker
 
 #endif
 
-        public void ChangeHUE(Color col)
+        public void ChangeHUE(Color col, int H)
         {
             curHUE = col;
+            curH = H;
             if (OnHUEChange != null)
-                OnHUEChange.Invoke();
+                OnHUEChange.Invoke(H);
+            if (OnSelectChange != null)
+                OnSelectChange.Invoke(curH, curS, curV, curP);
         }
 
-        public void ChangeNuance(Color col)
+        public void ChangeNuance(Color col, int S, int V)
         {
+            curS = S;
+            curV = V;
             curNuance = col;
             if (OnNuanceChange != null)
-                OnNuanceChange.Invoke();
+                OnNuanceChange.Invoke(S,V);
+            if (OnSelectChange != null)
+                OnSelectChange.Invoke(curH, curS, curV, curP);
         }
 
-        public void ChangePreset(Color col)
+        public void ChangePreset(int np)
         {
-            curPreset = col;
+            curP = np;
+            curPreset = colorPresets[curP].getColor();
             if (OnPresetChange != null)
-                OnPresetChange.Invoke();
+                OnPresetChange.Invoke(curP);
+            if (OnSelectChange != null)
+                OnSelectChange.Invoke(curH, curS, curV, curP);
         }
     }
 }

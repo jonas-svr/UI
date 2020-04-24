@@ -11,7 +11,7 @@ namespace ColorPicker
         private Image im;
         private Button btn;
         private ColorPalette colorPalette = null;
-        private int index;
+        private int H;
              
 
         void Awake()
@@ -33,7 +33,7 @@ namespace ColorPicker
         public void SetColor()
         {
             if(colorPalette)
-                colorPalette.ChangeHUE(im.color);
+                colorPalette.ChangeHUE(im.color, H);
         }
 
         public void SetIndex(float val)
@@ -95,7 +95,7 @@ namespace ColorPicker
 
         public void SetIndex(int id, int tot, ColorPalette palette)
         {
-            index = id;
+            H = id;
             colorPalette = palette;
             SetIndex(id * 1.0f / tot);
         }

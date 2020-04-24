@@ -8,16 +8,18 @@ namespace ColorPicker
     [RequireComponent(typeof(Image), typeof(Button))]
     public class NuanceBlock : MonoBehaviour, Block
     {
-        private Image colorPlace;
+        private Image im;
         private Button btn;
         private float val = 1.0f;
         private ColorPalette colorPalette = null;
 
         public Color lineColor;
+        private int S;
+        private int V;
 
         void Awake()
         {
-            colorPlace = GetComponent<Image>();
+            im = GetComponent<Image>();
             btn = GetComponent<Button>();
         }
 
@@ -36,18 +38,26 @@ namespace ColorPicker
 
         public void SetIndex(int index, int tot, ColorPalette palette)
         {
+            S = index;
             colorPalette = palette;
             colorPalette.OnHUEChange.AddListener(SetColor);
             val = 1.0f - 1.0f * index / (tot - 1);
             SetColor();
         }
 
-        public void SetColor()
+        public void SetColor(int H = 0)
         {
             if (colorPalette != null)
-                lineColor = colorPalette.curHUE * GetComponentInParent<NuanceLine>().lineVal;
+            {
+                NuanceLine nl = GetComponentInParent<NuanceLine>();
+                lineColor = colorPalette.curHUE * nl.lineVal;
+                V = nl.V;
+            }
             else
+            {
                 lineColor = Color.black;
+                V = 0;
+            }
             float r = lineColor.r;
             float g = lineColor.g;
             float b = lineColor.b;
@@ -64,13 +74,13 @@ namespace ColorPicker
             g = Mathf.Lerp(g,max,val);
             b = Mathf.Lerp(b,max,val);
 
-            colorPlace.color = new Color(r, g, b, 1.0f);         
+            im.color = new Color(r, g, b, 1.0f);         
 
         }
 
         public void SetNuance()
         {
-            colorPalette.ChangeNuance(colorPlace.color);
+            colorPalette.ChangeNuance(im.color, S, V);
         }
     }
 }
