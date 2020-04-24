@@ -19,11 +19,13 @@ namespace ColorPicker
         {
         }
 
-        public void SetIndex(int i,int tot)
+        public void SetIndex(int i,int tot, ColorPalette palette)
         {
             lineVal = i * 1.0f / (tot-1);
             lineVal = 1 - lineVal;
-            GetComponent<BlockContainer>().numberOfBlocks = tot;
+            BlockContainer bc = GetComponent<BlockContainer>();
+            bc.colorPalette = palette;
+            bc.numberOfBlocks = tot;
         }
 
     }

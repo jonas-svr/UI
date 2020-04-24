@@ -6,10 +6,13 @@ namespace ColorPicker
 {
     public class BlockContainer : MonoBehaviour
     {
-        public GameObject blockPrefab;
+        [HideInInspector]
+        public ColorPalette colorPalette;
 
+        [HideInInspector]
         public int numberOfBlocks = 20;
-        private int oldNumberOfBlocks;
+
+        public GameObject blockPrefab;
 
         // Start is called before the first frame update
         void Start()
@@ -29,17 +32,9 @@ namespace ColorPicker
             UpdateChildren();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            if (oldNumberOfBlocks != numberOfBlocks)
-                UpdateChildren();
-        }
 
-
-        private void UpdateChildren()
+        public void UpdateChildren()
         {
-            oldNumberOfBlocks = numberOfBlocks;
             for (int i = 0; i < transform.childCount; i++)
             {
                 Destroy(transform.GetChild(i).gameObject);
@@ -48,7 +43,7 @@ namespace ColorPicker
             {
                 GameObject blObj = GameObject.Instantiate(blockPrefab, transform);
                 Block bl = blObj.GetComponent<Block>();
-                bl.SetIndex(i,numberOfBlocks);
+                bl.SetIndex(i,numberOfBlocks,colorPalette);
             }
         }
     }

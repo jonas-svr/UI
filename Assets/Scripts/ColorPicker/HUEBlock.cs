@@ -6,10 +6,13 @@ using UnityEngine.UI;
 namespace ColorPicker
 {
     [RequireComponent(typeof(Image))]
-    public class ColorBlock : MonoBehaviour, Block
+    public class HUEBlock : MonoBehaviour, Block
     {
         private Image im;
         private Button btn;
+        private ColorPalette colorPalette = null;
+        private int index;
+             
 
         void Awake()
         {
@@ -29,7 +32,8 @@ namespace ColorPicker
 
         public void SetColor()
         {
-            ColorManager.instance.ChangeColor(im.color);
+            if(colorPalette)
+                colorPalette.ChangeHUE(im.color);
         }
 
         public void SetIndex(float val)
@@ -89,9 +93,11 @@ namespace ColorPicker
             im.color = col;
         }
 
-        public void SetIndex(int index, int tot)
+        public void SetIndex(int id, int tot, ColorPalette palette)
         {
-            SetIndex(index * 1.0f / (tot-1));
+            index = id;
+            colorPalette = palette;
+            SetIndex(id * 1.0f / tot);
         }
     }
 }

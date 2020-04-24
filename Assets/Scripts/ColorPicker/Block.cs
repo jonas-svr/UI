@@ -6,6 +6,6 @@ namespace ColorPicker
 {
     public interface Block
     {
-        void SetIndex(int index, int tot);
+        void SetIndex(int index, int tot, ColorPalette palette);
     }
 }
