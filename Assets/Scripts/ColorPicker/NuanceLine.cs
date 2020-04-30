@@ -29,6 +29,7 @@ namespace ColorPicker
             BlockContainer bc = GetComponent<BlockContainer>();
             bc.colorPalette = palette;
             bc.numberOfBlocks = tot;
+            bc.UpdateChildren();
         }
 
     }

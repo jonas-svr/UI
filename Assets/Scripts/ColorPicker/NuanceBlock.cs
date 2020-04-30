@@ -9,6 +9,7 @@ namespace ColorPicker
     public class NuanceBlock : MonoBehaviour, Block
     {
         private Image im;
+        public Image selected;
         private Button btn;
         private float val = 1.0f;
         private ColorPalette colorPalette = null;
@@ -30,8 +31,11 @@ namespace ColorPicker
 
         private void OnDisable()
         {
-            if(colorPalette != null)
+            if (colorPalette != null)
+            {
                 colorPalette.OnHUEChange.RemoveListener(SetColor);
+                colorPalette.OnSelectChange.RemoveListener(OnSelect);
+            }
             btn.onClick.RemoveListener(SetNuance);
 
         }
@@ -41,6 +45,7 @@ namespace ColorPicker
             S = index;
             colorPalette = palette;
             colorPalette.OnHUEChange.AddListener(SetColor);
+            colorPalette.OnSelectChange.AddListener(OnSelect);
             val = 1.0f - 1.0f * index / (tot - 1);
             SetColor();
         }
@@ -81,6 +86,16 @@ namespace ColorPicker
         public void SetNuance()
         {
             colorPalette.ChangeNuance(im.color, S, V);
+        }
+
+        public void OnSelect(int nH, int nS, int nV, int nP)
+        {
+            if (S == nS && V == nV)
+            {
+                selected.gameObject.SetActive(true);
+            }
+            else
+                selected.gameObject.SetActive(false);
         }
     }
 }

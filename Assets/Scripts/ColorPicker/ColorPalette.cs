@@ -56,12 +56,12 @@ namespace ColorPicker
             NuanceContainer.numberOfBlocks = numberOfNuance;
             oldNumberOfNuance = numberOfNuance;
             NuanceContainer.UpdateChildren();
-            PresetContainer.numberOfBlocks = numberOfPreset;
-            PresetContainer.UpdateChildren();
-            oldNumberOfPreset = numberOfPreset;
             colorPresets = new List<ColorPreset>();
             for (int i = 0; i < numberOfPreset; i++)
                 colorPresets.Add(new ColorPreset(Color.white, 0, 0, 0));
+            PresetContainer.numberOfBlocks = numberOfPreset;
+            PresetContainer.UpdateChildren();
+            oldNumberOfPreset = numberOfPreset;
         }
 
 #if UNITY_EDITOR
@@ -88,6 +88,7 @@ namespace ColorPicker
             curS = S;
             curV = V;
             curNuance = col;
+            colorPresets[curP].SetColor(curNuance, curH, curS, curV);
             if (OnNuanceChange != null)
                 OnNuanceChange.Invoke(S,V);
             if (OnSelectChange != null)
@@ -98,6 +99,9 @@ namespace ColorPicker
         {
             curP = np;
             curPreset = colorPresets[curP].getColor();
+            curH = colorPresets[curP].H;
+            curS = colorPresets[curP].S;
+            curV = colorPresets[curP].V;
             if (OnPresetChange != null)
                 OnPresetChange.Invoke(curP);
             if (OnSelectChange != null)
